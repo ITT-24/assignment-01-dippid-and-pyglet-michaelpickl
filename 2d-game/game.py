@@ -20,12 +20,12 @@ fall_speed = [50, 60, 70, 80, 90, 100]
 window = pyglet.window.Window(window_width, window_height)
 #background was taken from opengamerart
 #https://opengameart.org/content/light-wood-1024x1024
-background_img = pyglet.image.load('wood.png')
+background_img = pyglet.image.load('pictures/wood.png')
 background = pyglet.sprite.Sprite(background_img)
 background.scale = 1.5
 #fruits was taken from vecteezy.com
 #https://www.vecteezy.com/vector-art/11993354-paring-knife-cooking-knife-icon-isolated-on-white-background-vector-illustration-in-flat-style-utensils-for-cooking-kitchenware-vector-illustration
-knife_img = pyglet.image.load('knife.png')
+knife_img = pyglet.image.load('pictures/knife.png')
 knife = pyglet.sprite.Sprite(knife_img)
 knife.scale = 0.05
 
@@ -36,19 +36,19 @@ def get_random_image():
     number = random.randrange(0, 5)
     match number:
         case 1:
-            fruit = 'cherry.png'
+            fruit = 'pictures/cherry.png'
             return fruit
         case 2:
-            fruit = 'lemon.png'
+            fruit = 'pictures/lemon.png'
             return fruit
         case 3:
-            fruit = 'pear.png'
+            fruit = 'pictures/pear.png'
             return fruit
         case 4:
-            fruit = 'apple.png'
+            fruit = 'pictures/apple.png'
             return fruit
         case 5:
-            fruit = 'strawberry.png'
+            fruit = 'pictures/strawberry.png'
             return fruit
         
 #returns a random number from list
@@ -65,7 +65,7 @@ def get_random_rotation():
 def create(dt):
     fruit = get_random_image()
     if fruit == None:
-        fruit = 'apple.png'
+        fruit = 'pictures/apple.png'
     print(fruit)
     scale_number = get_random_int()
     rotation = get_random_rotation()
