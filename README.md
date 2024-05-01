@@ -3,14 +3,12 @@
 
 Assignment 1: DIPPID and pyglet
 
-1 DIPPID Sender 
-.py to send sample data in DIPPID format.
+1 DIPPID Sender.py to send sample data in DIPPID format.
 uses sinus curve to calculate sample data.
 uses different frequencies to simulate accelerometer.
 gets an random number 0 or 1 to simulate an button press.
 
-2 2D Game
-2D Game where u slice some fruits. \n
+2 2D Game where u slice some fruits.
 u can control the knife with the gyroscope data from phone.
 hit fruits with knife to make them disappear.
 fruits spawn random on the top half of the screen.
