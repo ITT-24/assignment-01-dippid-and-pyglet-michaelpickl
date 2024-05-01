@@ -2,72 +2,83 @@ import pyglet
 import random
 from DIPPID import SensorUDP
 
+#connect phone with game
 PORT = 5700
 sensor = SensorUDP(PORT)
 
-# Constants
+#window size
 window_width = 1280
 window_height = 720
+
+#lists 
 fruits = []
-fall_speed = 50
+#for randomizing same variables
+sizes = [0.05, 0.075, 0.1, 0.2, 0.3]
+times = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
+fall_speed = [50, 60, 70, 80, 90, 100]
 
 window = pyglet.window.Window(window_width, window_height)
+#background was taken from opengamerart
+#https://opengameart.org/content/light-wood-1024x1024
+background_img = pyglet.image.load('wood.png')
+background = pyglet.sprite.Sprite(background_img)
+background.scale = 1.5
+#fruits was taken from vecteezy.com
+#https://www.vecteezy.com/vector-art/11993354-paring-knife-cooking-knife-icon-isolated-on-white-background-vector-illustration-in-flat-style-utensils-for-cooking-kitchenware-vector-illustration
 knife_img = pyglet.image.load('knife.png')
 knife = pyglet.sprite.Sprite(knife_img)
+knife.scale = 0.05
 
-list_fruits = ['apricot.png', 'banana.png', 'blue_berry.png', 'blueberrys.png', 'cherry.png', 'cherry2.png', 'citron.png', 'drachenfrucht.png'
-                'drachenfrucht1.png', 'drachenfrucht2.png', 'green_apple.png', 'green_banana.png', 'green_berry.png', 'lime.png', 'orange_banana.png'
-                'pearl.png', 'pfirisch.png', 'pineapple.png', 'purple_berry.png', 'red_apple.png', 'strawberry.png', 'yellow_apple.png']
-
+# gets one of five different fruits
 def get_random_image():
+    #fruits was taken from vecteezy.com
+    #https://www.vecteezy.com/vector-art/6647916-vector-fruit-apple-banana-melon-orange-coconut-blueberry-watermelon-cherry-strawberry-kiwi-lemon-pear-grape-peach-pineapple-avocado-mango
     number = random.randrange(0, 5)
     match number:
         case 1:
-            fruit = 'apricot.png'
-            return fruit
-        case 2:
-            fruit = 'banana.png'
-            return fruit
-        case 3:
-            fruit = 'blue_berry.png'
-            return fruit
-        case 4:
-            fruit = 'blueberrys.png'
-            return fruit
-        case 5:
             fruit = 'cherry.png'
             return fruit
-    
-    
-
-
-
+        case 2:
+            fruit = 'lemon.png'
+            return fruit
+        case 3:
+            fruit = 'pear.png'
+            return fruit
+        case 4:
+            fruit = 'apple.png'
+            return fruit
+        case 5:
+            fruit = 'strawberry.png'
+            return fruit
+        
+#returns a random number from list
 def get_random_int():
-    number = random.randrange(4, 10)
+    number = random.choice(sizes)
     return number
+#returns random number in range
 def get_random_rotation():
     rotation = random.randrange(0, 360)
     return rotation
 
-
-
-
+#create fruit
+# image, size, rotation
 def create(dt):
     fruit = get_random_image()
     if fruit == None:
-        fruit = 'apricot.png'
+        fruit = 'apple.png'
     print(fruit)
     scale_number = get_random_int()
     rotation = get_random_rotation()
     fruit_img = pyglet.image.load(str(fruit))
-    x = random.randint(int(fruit_img.width), int(window_width - fruit_img.width))  
-    y = random.randint(int(window_height/2), int(window_height - fruit_img.height)) 
+    x = random.randint(int(100), int(window_width - 100))  
+    y = random.randint(int(window_height/2), int(window_height - 100)) 
     fruit = pyglet.sprite.Sprite(fruit_img, x, y)
     fruit.scale = scale_number
     fruit.rotation = rotation
     fruits.append(fruit)
 
-def handle_accelerometer(data):
+#get data from gyroscope
+def handle_gyroscope(data):
     acc_x = data.get("x")
     acc_y = data.get("y")
 
@@ -85,10 +96,11 @@ def handle_accelerometer(data):
 
     check_collision()
 
-sensor.register_callback('gyroscope', handle_accelerometer)
+sensor.register_callback('gyroscope', handle_gyroscope)
 
+#checks if knife hits fruit
+#removes fruit if hit
 def check_collision():
-    global fruits
     for fruit in fruits:
         if knife.x < fruit.x + fruit.width and \
             knife.x + knife.width > fruit.x and \
@@ -96,19 +108,22 @@ def check_collision():
             knife.y + knife.height > fruit.y:
             fruits.remove(fruit)
 
+#update the fruits, make them fall
 def update(dt):
     for fruit in fruits:
-        fruit.y -= fall_speed * dt
-        
+        fruit.y -= random.choice(fall_speed) * dt
 
+#draw the game elements   
 @window.event
 def on_draw():
     window.clear()
+    background.draw()
     for fruit in fruits:
         fruit.draw()
     knife.draw()
 
-pyglet.clock.schedule_interval(create, 2)
+# set timer for creation and update
+pyglet.clock.schedule_interval(create, random.choice(times))
 pyglet.clock.schedule_interval(update, 1/60)
 
 pyglet.app.run()
