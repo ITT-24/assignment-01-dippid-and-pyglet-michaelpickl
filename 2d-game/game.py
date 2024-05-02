@@ -29,6 +29,8 @@ knife_img = pyglet.image.load('pictures/knife.png')
 knife = pyglet.sprite.Sprite(knife_img)
 knife.scale = 0.05
 
+acceleration = 1
+
 # gets one of five different fruits
 def get_random_image():
     #fruits was taken from vecteezy.com
@@ -69,6 +71,8 @@ def create(dt):
     print(fruit)
     scale_number = get_random_int()
     rotation = get_random_rotation()
+
+    # AS: avoid loading images from disk during runtime
     fruit_img = pyglet.image.load(str(fruit))
     x = random.randint(int(100), int(window_width - 100))  
     y = random.randint(int(window_height/2), int(window_height - 100)) 
@@ -82,8 +86,9 @@ def handle_gyroscope(data):
     acc_x = data.get("x")
     acc_y = data.get("y")
 
-    knife.x = knife.x + acc_x * 5
-    knife.y = knife.y + acc_y * 5
+    global acceleration
+    knife.x = knife.x + acc_x * acceleration
+    knife.y = knife.y + acc_y * acceleration
 
     if knife.x > window_width:
         knife.x = window_width
